@@ -16,10 +16,6 @@ public:
     explicit ClientInfoWidget(QWidget *parent = nullptr);
     ~ClientInfoWidget();
     ClientSock *clientSock;
-    QString clientId;
-    QString lastContact;
-    QString lastPacketType;
-    QString brokerStatus;
     void setClientSock(ClientSock&);
     void updateMyself();
 private:

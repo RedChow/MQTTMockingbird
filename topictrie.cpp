@@ -2,7 +2,29 @@
 #include <QDebug>
 
 /*
- *	TrieNode
+ *	TrieNode & TopicTrie
+ *  	Each string separated by a forward slash is a node. E.g.,
+ * 		this/is/a/topic becomes:
+ * 		this
+ * 		  |
+ *       is
+ *        |
+ *        a
+ *        |
+ *      topic
+ * and then this/is/another/topic becomes:
+ *      this
+ * 	      |
+ *        is
+ *       /  \
+ *      a   another
+ *      |       |
+ *    topic   topic
+ *  Each topic than comes in gets mapped to a new topic. So at the end of the Trie, we keep the mapped topic.
+ *
+ * For example, suppose this/is/a/topic gets mapped to this/topic/a and this/is/another/topic maps to this/topic/another,
+ * the function getMapToTopic("this/is/a/topic") returns this/topic/a and getMapToTopic("this/is/another/topic") returns
+ * this/topic/another. These two return values are the topics that are sent to the broker.
  */
 
 TrieNode::TrieNode() {
@@ -115,6 +137,7 @@ bool TopicTrie::deleteTopic(QString topic) {
         }
         current = current->getChildFromTopic(t);
     }
+    //This will delete the path
     delete deleteNode->children[lastTopic];
     deleteNode->children.erase(lastTopic);
     return true;

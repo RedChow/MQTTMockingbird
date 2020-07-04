@@ -22,8 +22,6 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mqttbridgeserver.cpp \
-    mqttbridgeserverthread.cpp \
-    mqttclients.cpp \
     mqttpacket.cpp \
     topicmappingdialog.cpp \
     topictrie.cpp
@@ -34,8 +32,6 @@ HEADERS += \
     diff.h \
     mainwindow.h \
     mqttbridgeserver.h \
-    mqttbridgeserverthread.h \
-    mqttclients.h \
     mqttpacket.h \
     topicmappingdialog.h \
     topictrie.h

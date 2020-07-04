@@ -14,7 +14,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    mqttClients = new MQTTClients();
     connect(ui->pushButtonStartClientBridge, &QPushButton::clicked, this, &MainWindow::startMQTTBridgeServer);
     connect(ui->pushButtonStopClientBridge, &QPushButton::clicked, this, &MainWindow::stopMQTTBridgeServer);
     connect(ui->pushButtonAddTopicMapping, &QPushButton::clicked, this, &MainWindow::openTopicMappingDialog);
@@ -22,17 +21,12 @@ MainWindow::MainWindow(QWidget *parent)
     QStringList tableHeaders;
     tableHeaders << "Device Id" << "Incoming Topic" << "Outgoing Topic";
     ui->tableWidgetTopicMappings->setHorizontalHeaderLabels(tableHeaders);
+
+    //TODO: Remove the next line
     addNewTopicToTrie(QString("this/is/a/{0}@{1}/badtopic"), QString("this/is/a/{0}"), QString("mqttx_c1a70902"));
 
     connect(ui->tableWidgetTopicMappings, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(tableHasBeenEdited(QTableWidgetItem*)));
-    //connect(ui->tableWidgetTopicMappings, SIGNAL(currentItemChanged(QTableWidgetItem*, QTableWidgetItem*)), this, SLOT(tableCurrentCellChanged(QTableWidgetItem*, QTableWidgetItem*)));
     connect(ui->tableWidgetTopicMappings, SIGNAL(itemSelectionChanged()), this, SLOT(tableItemSelectionChanged()));
-}
-
-void MainWindow::tableCurrentCellChanged(QTableWidgetItem *currentItem, QTableWidgetItem *previousItem) {
-    if (currentItem != nullptr && previousItem != nullptr) {
-        qDebug() << "tableCurrent" << currentItem->text() << previousItem->text();
-    }
 }
 
 void MainWindow::tableItemSelectionChanged() {
@@ -90,22 +84,15 @@ void MainWindow::addNewTopicToTrie(QString incomingTopicRule, QString mappedTopi
     TopicTrie *topicTrieClient = new TopicTrie();
     topicTrieClient->setMappingRule(incomingTopicRule);
     topicTrieClient->setRemapRule(mappedTopicRule);
-    qDebug() << clientId << incomingTopicRule << mappedTopicRule << topicTrieClient;
 
     TopicTrie *reverseTopicTrieClient = new TopicTrie();
 
     mapFromClient[clientId] = topicTrieClient;
     mapToClient[clientId] = reverseTopicTrieClient;
-    for (auto temp: mapFromClient.keys()) {
-        qDebug() << "mapFromClient" << temp << mapFromClient[temp];
-    }
     ui->tableWidgetTopicMappings->insertRow(ui->tableWidgetTopicMappings->rowCount());
     ui->tableWidgetTopicMappings->setItem(ui->tableWidgetTopicMappings->rowCount()-1, 0, new QTableWidgetItem(clientId));
     ui->tableWidgetTopicMappings->setItem(ui->tableWidgetTopicMappings->rowCount()-1, 1, new QTableWidgetItem(incomingTopicRule));
     ui->tableWidgetTopicMappings->setItem(ui->tableWidgetTopicMappings->rowCount()-1, 2, new QTableWidgetItem(mappedTopicRule));
-    qDebug() << "before hash";
-    QHash<QString, TopicTrie*>::const_iterator i = mapFromClient.find(clientId);
-    qDebug() << "after table" << clientId << i.key() << i.value();
 
     updateClientListWidgetMain();
     connect(ui->tableWidgetTopicMappings, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(tableHasBeenEdited(QTableWidgetItem*)));
@@ -123,23 +110,18 @@ void MainWindow::startMQTTBridgeServer() {
 
 void MainWindow::addNewClient(QString clientId, int index) {
     Q_UNUSED(index);
-    QList<int> indicesToDelete;
     int i;
     int indexToDelete{-1};
     for (i = 0; i < mqttBridgeServer->Clients.size() - 1; i++) {
         if (mqttBridgeServer->Clients.at(i)->clientId == clientId) {
             indexToDelete = i;
+            break;
         }
     }
     if (indexToDelete >= 0) {
         mqttBridgeServer->adjustClientList(indexToDelete);
     }
     updateClientListWidgetMain();
-}
-
-void MainWindow::removeClient(int index) {
-    mqttClients->Clients.removeAt(index);
-    emit itemRemovedMain();
 }
 
 void MainWindow::stopMQTTBridgeServer() {
@@ -155,6 +137,7 @@ void MainWindow::bridgeIsConnected() {
 
 void MainWindow::setClientSockBrokerInfo() {
     mqttBridgeServer->setBrokerInfo(ui->lineEditBrokerIP->text(), ui->spinBoxBrokerPort->value());
+    ui->pushButtonStartClientBridge->setEnabled(true);
 }
 
 void MainWindow::updateClientListWidgetMain() {

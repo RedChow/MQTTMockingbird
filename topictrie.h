@@ -10,18 +10,18 @@ private:
     QString topicFragment;
     bool end = false;
 public:
-    TrieNode(QString);
+    TrieNode(QString topicFragment);
     TrieNode();
     std::unordered_map<QString, TrieNode*> children;
-    void insert(QString);
+    void insert(QString topicFragment);
     void setEnd(bool);
     bool isEnd();
-    TrieNode* getChildFromTopic(QString);
+    TrieNode* getChildFromTopic(QString topic);
     int getNumberOfChildren();
-    void setTopicFragment(QString);
-    void setMapToTopic(QString);
+    void setTopicFragment(QString topic);
+    void setMapToTopic(QString newTopic);
     void printChildren();
-    void printChildren(TrieNode*);
+    void printChildren(TrieNode* tn);
     QString mapToTopic;
 };
 
@@ -31,7 +31,7 @@ public:
     TopicTrie();
     bool end;
     std::unordered_map<QString, TrieNode*> map;
-    void insertNewTopic(QString, QString newTopic = "");
+    void insertNewTopic(QString topic, QString newTopic = "");
     bool search(QString topic);
     bool deleteTopic(QString topic);
     QString getMapToTopic(QString topic);

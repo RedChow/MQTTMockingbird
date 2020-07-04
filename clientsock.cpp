@@ -57,12 +57,6 @@ void ClientSock::setClientId(QString p_ClientId) {
 }
 
 void ClientSock::processPacket(QByteArray &qba, bool serverToClient) {
-    /*
-     * 	Here let's change this to:
-     * 		FixedHeader *fixedHeader = qba.left(0,2);
-     * 			remaining length from fixedHeader we can make a corresponding
-     * 			variable header with qba.left(2, remainingLength)
-     */
     MQTTPacketv2 *packetv2 = new MQTTPacketv2(qba);
     packetv2->getFixedHeader();
     lastPacketType = PacketTypes[packetv2->command - 1];
@@ -152,10 +146,6 @@ void ClientSock::processPacket(QByteArray &qba, bool serverToClient) {
                 QString newTopic = QString("");
                 while (iterator.hasNext()) {
                     iterator.next();
-                    /*
-                     *  Diff diffTopic(topicTrie->mappingRule, packetv2->info["topic"].toString(), topicTrie->remapRule);
-                     *  newTopic = diffTopic.getMappedTopic();
-                     */
                     tempTopic = topicTrie->getMapToTopic(iterator.key());
                     remainingSize += 3; //1 for qos and 2 for the length
                     if (!tempTopic.isEmpty()) {
@@ -164,10 +154,8 @@ void ClientSock::processPacket(QByteArray &qba, bool serverToClient) {
                     }
                     else {
                         //if no topic has been mapped yet, we create one
-
                         Diff diffTopic(topicTrie->mappingRule, iterator.key(),topicTrie->remapRule);
                         newTopic = diffTopic.getMappedTopic();
-                        qDebug() << "++++ PUBLISH" << iterator.key() << newTopic;
                         //TODO: how to tell if getMappedTopic fails; fall back to topic if it fails
                         topicTrie->insertNewTopic(packetv2->info["topic"].toString(), newTopic);
                         reverseTopicTrie->insertNewTopic(newTopic, iterator.key());
@@ -190,6 +178,7 @@ void ClientSock::processPacket(QByteArray &qba, bool serverToClient) {
         case UNSUBSCRIBE:
             //always client to server
             //will be similar to SUBSCRIBE, except there is no qos field
+            //TODO: Implement UNSUBSCRIBE
             break;
         case UNSUBACK:
             //always server to client
@@ -214,13 +203,7 @@ void ClientSock::processPacket(QByteArray &qba, bool serverToClient) {
     lastContact = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
 }
 
-void ClientSock::test(QAbstractSocket::SocketState) {
-    qDebug() << "the state of " << clientId << this->state();
-}
-
 void ClientSock::writeToSocket(QByteArray p_packet, bool serverToClient) {
-    qDebug() << "WriteToSocket: " << p_packet << " " << serverToClient;
-    qDebug() << "WriteToSocket - hex:" << p_packet.toHex();
     if (!serverToClient) {
         brokerSocket->write(p_packet);
     }
@@ -230,12 +213,10 @@ void ClientSock::writeToSocket(QByteArray p_packet, bool serverToClient) {
 }
 
 void ClientSock::updateClientName(QString p_ClientName) {
-    qDebug() << p_ClientName;
     clientId = p_ClientName;
 }
 
 void ClientSock::readyReadPacket() {
-    //QByteArray qba = readAll();
     QByteArray qba = brokerSocket->readAll();
     if (qba.size() > 0) {
         processPacket(qba, true);

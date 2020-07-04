@@ -15,7 +15,6 @@ signals:
     void serverConnected();
     void itemAdded();
     void itemRemoved(int);
-    void finished();
     void updateClientListWidget(int);
     void newClientAdded(QString clientId, int index);
     void prepPacketToPublish(int, QByteArray);
@@ -24,7 +23,6 @@ public slots:
     void slotReadyRead(int index);
     void slotDisconnect(int index);
     void slotClientConnected(int index);
-    void slotPublishPacket(int);
     void itemHasBeenRemoved();
 public:
     MQTTBridgeServer(QObject *parent = nullptr);

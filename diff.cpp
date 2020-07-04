@@ -2,6 +2,41 @@
 #include <QDebug>
 #include <algorithm>
 
+/*
+ *	Implementation of Myers algorithm to find the diff between two strings.
+ *  How it's used:
+ *  	stringWithMapping: string that contains an identifying pattern, such as {0}, {PATT}, #HTOPIC#, UNUSED, etc;
+ * 			Needs to be something that has no chance of being matched in stringMapAgainst
+ * 		stringMapAgainst: Topic from device/client that will be re-mapped to a new topic
+ *
+ * 	Diff is applied to stringWithMappging and stringMapAgainst. The identifying patterns in stringWithMapping will "capture"
+ *  a string in stringMapAgainst. These strings that are captured are then re-arranged in stringNewMapping. The capture groups that
+ *  appear in stringWithMapping need to appear in stringNewMapping in the places you want to rearrange the topic, or leave them out
+ * 	if you'd like to remove that portion. The curly braces aren't needed, I just tend to include them because it makes it easier for
+ *  me to see the capture groups. Example 4 gives an example with no {}.
+ *
+ *  NOTE: This is very similar to https://docs.python.org/3/library/difflib.html and using difflib.ndiff(stringWithMapping, stringMapAgainst).
+ *
+ * 	Examples:
+ * 		1. stringWithMapping: this/is/a/{0}-{1}/{2}
+ * 		   stringMapAgainst: this/is/a/bad-topic/reallybad
+ *         stringNewMapping: this/{0}/{2}
+ * 		 	Making a Diff object and then calling getMappedTopic will return "this/bad/reallybad" as the new topic
+ * 		2. stringWithMapping: this/is/a/{pass}-{DELETEME}/{REARRANGE}
+ * 		   stringMapAgainst: this/is/a/bad-topic/reallybad
+ *         stringNewMapping: this/is/{pass}/{REARRANGE}
+ * 			This will yield the same as Example 1: "this/bad/reallybad" gets returned
+ * 		3. stringWithMapping: this/is/a/{pass}-{DELETEME}/{REARRANGE}
+ * 		   stringMapAgainst: this/is/a/bass-topic/reallybad
+ *         stringNewMapping: this/{pass}/{REARRANGE}
+ * 			This will return this/is/bass}/reallybad, but replacing {pass} with {PASS} will result in this/is/bad/reallybad
+ *          NOTE: The algorithm is case sensitive!
+ * 		4. stringWithMapping: this/is/a/?-@/!
+ * 		   stringMapAgainst: this/is/a/bad-topic/test
+ * 		   stringNewMapping: this/is/?/!
+ * 			This will return this/is/bad/test
+ */
+
 struct Point {
     int x;
     int y;
@@ -56,11 +91,6 @@ int Diff::shortestEditScriptLength() {
 }
 
 void Diff::createMap() {
-    //int N = stringWithMapping.size(); old_string
-    //int M = stringMapAgainst.size();  new_string
-    //std::unordered_map<QString, QString> map;
-    //QHash<QString, QString> map;
-    //QVector<Point> points;
     std::vector<Point> points;
     int x = stringWithMapping.length();
     int y = stringMapAgainst.length();
@@ -74,7 +104,6 @@ void Diff::createMap() {
     int k{0};
     int prev_k{0};
     for (auto v: allVs) {
-        //qDebug() << "x, y: " << x << " " << y << " " << d;
         points.emplace_back(x, y);
         k = x - y;
         down = (k == -d || (k != d && v[mapIndex(k-1, maxLength + 2)] < v[mapIndex(k+1, maxLength + 2)]));
@@ -85,7 +114,9 @@ void Diff::createMap() {
         y_mid = x_mid - k;
         //could find diagonal coordinates here if desired
         /*
-         * Diagonal points are found by iterating down on
+         * Diagonal points are found by iterating down on equal coordinates
+         * But, we don't care where the two strings are equal, we only care where they aren't.
+         *
          */
         if (x_mid != x and y_mid != y) {
             points.emplace_back(x_mid, y_mid);
@@ -97,7 +128,6 @@ void Diff::createMap() {
     QString key = "";
     QString value = "";
     for (int i = points.size() - 1; i > 0; i--) {
-        //qDebug() << "key, value: " << key << " " << value;
         Point point_1 = points[i];
         Point point_2 = points[i-1];
         if (point_1.x == point_2.x) {

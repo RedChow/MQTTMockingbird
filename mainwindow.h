@@ -7,7 +7,6 @@
 #include "mqttbridgeserver.h"
 #include "clientinfowidget.h"
 #include "topicmappingdialog.h"
-#include "mqttclients.h"
 #include "topictrie.h"
 
 
@@ -23,7 +22,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     TopicMappingDialog *topicMappingDialog;
-    MQTTClients *mqttClients;
     void startMQTTBridgeServer();
     void stopMQTTBridgeServer();
     void openTopicMappingDialog();
@@ -39,11 +37,9 @@ public slots:
     void bridgeIsConnected();
     void updateClientListWidgetMain();
     void refreshList(int);
-    void removeClient(int);
     void addNewClient(QString clientId, int index);
     void addNewTopicToTrie(QString incomingTopicRule, QString mappedTopicRule, QString clientId);
     void tableHasBeenEdited(QTableWidgetItem *item);
-    void tableCurrentCellChanged(QTableWidgetItem *currentItem, QTableWidgetItem *previousItem);
     void tableItemSelectionChanged();
 private:
     Ui::MainWindow *ui;

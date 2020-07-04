@@ -13,14 +13,19 @@ class ClientSock : public QTcpSocket
     Q_OBJECT
 public:
     ClientSock();
+    QString clientId;
+    QString lastContact;
+    QString lastPacketType;
+    TopicTrie *topicTrie;
+    TopicTrie *reverseTopicTrie;
+    void setBrokerInfo(QString p_brokerIP, int p_brokerPort);
+    void connectBroker();
+    void processPacket(QByteArray&, bool serverToClient=false);
+    void setClientId(QString);
+private:
     QTcpSocket *brokerSocket;
     QString brokerIP;
     int brokerPort;
-    void setBrokerInfo(QString p_brokerIP, int p_brokerPort);
-    void connectBroker();
-    TopicTrie *topicTrie;
-    TopicTrie *reverseTopicTrie;
-    QString clientId;
     QString username;
     QString password;
     int mqttVersion;
@@ -28,19 +33,11 @@ public:
     int qos;
     bool willFlag;
     bool cleanSession;
-    QString lastContact;
-    QString lastPacketType;
-
-    void processPacket(QByteArray&, bool serverToClient=false);
-    void setClientId(QString);
 signals:
     void clientConnected();
-    void publishPacket();
-
 public slots:
     void writeToSocket(QByteArray p_packet, bool serverToClient=false);
     void updateClientName(QString);
-    void test(QAbstractSocket::SocketState);
     void readyReadPacket();
 };
 

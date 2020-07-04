@@ -13,7 +13,6 @@ TopicMappingDialog::TopicMappingDialog(QWidget *parent) :
 }
 
 void TopicMappingDialog::setClientIds(QList<QString> p_clientIds) {
-    clientIds = p_clientIds;
     for (auto clientId: p_clientIds) {
         ui->comboBoxClientId->addItem(clientId, clientId);
     }

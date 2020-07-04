@@ -16,7 +16,6 @@ public:
     ~TopicMappingDialog();
     void setNewTopic();
     void sendAddTopicToTrie();
-    QList<QString> clientIds;
     void setClientIds(QList<QString> p_clientIds);
     void fillComboBox();
 signals:

@@ -22,7 +22,6 @@ MQTTBridgeServer::MQTTBridgeServer(QObject *parent) :
 }
 
 void MQTTBridgeServer::setBrokerInfo(QString p_brokerIP, int p_brokerPort) {
-    qDebug() << "setBrokerInfo";
     brokerIP = p_brokerIP;
     brokerPort = p_brokerPort;
 }
@@ -36,10 +35,6 @@ void MQTTBridgeServer::startServer(QHostAddress hostAddress, int port) {
 
 void MQTTBridgeServer::slotClientConnected(int index) {
     emit newClientAdded(Clients[index]->clientId, index);
-}
-
-void MQTTBridgeServer::slotPublishPacket(int index) {
-    emit updateClientListWidget(index);
 }
 
 void MQTTBridgeServer::incomingConnection(qintptr socketDescriptor) {
@@ -81,8 +76,6 @@ void MQTTBridgeServer::itemHasBeenRemoved() {
 void MQTTBridgeServer::slotReadyRead(int index)
 {
     QByteArray message = Clients.at(index)->readAll();
-    qWarning() << "Client " << index << " has written: " << message.toHex();
-    qDebug() << "Message in byte code: " << message << ", index: " << index;
     if (message.size() > 0) {
         Clients.at(index)->processPacket(message);
         emit updateClientListWidget(index);
