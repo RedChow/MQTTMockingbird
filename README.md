@@ -35,7 +35,11 @@ There are dozens of ways to implement a trie in C++. This approach is similar to
 Because the program maps all incoming publish and subscribe topics, if you need wildcard in a subscription it would be best to include in the mapping definitions, namely in the remap topic rule. In the future I plan to have diff disregard topic fragments that contain '*' or '#.' It will probably apply diff to each topic fragment, i.e. each string between forward slashes.
 </p>
 <h1>Screenshots</h1>
+<p>
+  Setup for screenshosts: MQTTX and Node-RED clients connect to MQTTMockingbird. Used mosquitto broker to test incoming and subscribe messages. Mosquitto was set to verbose mode to check that topics were getting mapped.
+  </p>
 ![Alt text](/screenshots/main_window_rule_for_node_red.png?raw=true "Main Window")
+Shows mappings for MQTTX and Node-RED clients.
 
 ![Alt text](/screenshots/main_window_topic_tab.png?raw=true "Topic mappings main window")
 
@@ -44,5 +48,8 @@ Subclass QWidget to make custom widget show up in QListWidget.
 
 ![Alt text](/screenshots/mapped_topic_publish.png?raw=true "Shows incoming topic mapped")
 Show incoming topic mapped to a new topic.  
+
+![Alt text](/screenshots/node_red_mqtt_setup.png?raw=true "Publish from Node-RED")
+Publish from Node-RED.
   
 
