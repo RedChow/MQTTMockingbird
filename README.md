@@ -52,4 +52,11 @@ Show incoming topic mapped to a new topic.
 ![Alt text](/screenshots/node_red_mqtt_setup.png?raw=true "Publish from Node-RED")
 Publish from Node-RED.
   
+![Alt text](/screenshots/publish_from_node_red.png?raw=true "Publish from Node-RED")
+Check mosquitto that the topic was mapped.
+
+![Alt text](/screenshots/MQTTX_subscribe_message.png?raw=true "")
+Subscribe from MQTTX subscribed to "this/is/a/igetreplaced," but the incoming topic is mapped back to "this/is/a/igetreplaced@bad/badtopic."
+
+
 
