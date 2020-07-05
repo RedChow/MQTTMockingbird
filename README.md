@@ -34,5 +34,5 @@ There are dozens of ways to implement a trie in C++. This approach is similar to
 Because the program maps all incoming publish and subscribe topics, if you need wildcard in a subscription it would be best to include in the mapping definitions, namely in the remap topic rule. In the future I plan to have diff disregard topic fragments that contain '*' or '#.' It will probably apply diff to each topic fragment, i.e. each string between forward slashes.
 
 <h1>Screenshots</h1>
-![alt text](https://github.com/RedChow/MQTTMockingbird/blob/master/screenshots/main_window_rule_for_node_red.png)
+![alt text](https://github.com/RedChow/MQTTMockingbird/blob/master/screenshots/main_window_rule_for_node_red.png?raw=true)
 
