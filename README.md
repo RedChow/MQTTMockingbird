@@ -28,12 +28,35 @@ Here are some different examples than those in diff.cpp:
   </li>
 </ol>
 <h1>Topic Trie</h1>
+<p>
 There are dozens of ways to implement a trie in C++. This approach is similar to one that I have taken previously in Python. Although there are Python packages for tries, a topic trie is very specialized in that it must deal with wildcards, so you're left having to implement a custom trie yourself. A very easy and straight-forward approach in Python is to make a trie out of nested dictionaries. Here in Qt we use an unordered_map. We could have just as easily used a QHash. 
-
-
+</p>
+<p>
 Because the program maps all incoming publish and subscribe topics, if you need wildcard in a subscription it would be best to include in the mapping definitions, namely in the remap topic rule. In the future I plan to have diff disregard topic fragments that contain '*' or '#.' It will probably apply diff to each topic fragment, i.e. each string between forward slashes.
-
+</p>
 <h1>Screenshots</h1>
-  ![Alt text](/screenshots/main_window_rule_for_node_red.png?raw=true)
-  ![Alt text](/screenshots/main_window_rule_for_node_red.png "Tracing")
+<p>
+  Setup for screenshosts: MQTTX and Node-RED clients connect to MQTTMockingbird. Used mosquitto broker to test incoming and subscribe messages. Mosquitto was set to verbose mode to check that topics were getting mapped.
+  </p>
+![Alt text](/screenshots/main_window_rule_for_node_red.png?raw=true "Main Window")
+Shows mappings for MQTTX and Node-RED clients.
+
+![Alt text](/screenshots/main_window_topic_tab.png?raw=true "Topic mappings main window")
+
+![Alt text](/screenshots/main_window_clients_tab.png?raw=true "Custom Widgets")
+Subclass QWidget to make custom widget show up in QListWidget.
+
+![Alt text](/screenshots/mapped_topic_publish.png?raw=true "Shows incoming topic mapped")
+Show incoming topic mapped to a new topic.  
+
+![Alt text](/screenshots/node_red_mqtt_setup.png?raw=true "Publish from Node-RED")
+Publish from Node-RED.
+  
+![Alt text](/screenshots/publish_from_node_red.png?raw=true "Publish from Node-RED")
+Check mosquitto that the topic was mapped.
+
+![Alt text](/screenshots/MQQTX_subscribe_message.png?raw=true "")
+Subscribe from MQTTX subscribed to "this/is/a/igetreplaced," but the incoming topic is mapped back to "this/is/a/igetreplaced@bad/badtopic."
+
+
 
