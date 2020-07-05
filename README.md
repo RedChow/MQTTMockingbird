@@ -37,7 +37,7 @@ Because the program maps all incoming publish and subscribe topics, if you need 
 <h1>Screenshots</h1>
 ![Alt text](/screenshots/main_window_rule_for_node_red.png?raw=true "Main Window")
 
-![Alt text](/screenshots/main_windows_clients_tab.png?raw=true "Shows incoming topic mapped")
+![Alt text](/screenshots/main_window_clients_tab.png?raw=true "Shows incoming topic mapped")
 Subclass QWidget to make custom widget show up in QListWidget.
 
 ![Alt text](/screenshots/mapped_topic_publish.png?raw=true "Shows incoming topic mapped")
