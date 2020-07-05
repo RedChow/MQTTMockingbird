@@ -5,6 +5,9 @@ This is a personal project that was aimed at (1) learning and implemmenting Myer
 
 This program can handle multiple clients, but currently can only handle one topic mapping per client. I think it may be possible in the future to handle multiple mappings per client, but I haven't delved too far into it yet. The program connects to only one broker.
 
+<h2>Environment</h2>
+This was deveoped using Qt 5.14.2 using Qt Creator 4.12.3 on Fedora 31 and openSUSE Tumbleweed. Algorithms and data structures were developed in KDevelop 5.5.2 using GCC 9.3.1 and then converted into Qt.
+
 <h1>Topic Mappings</h1>
 <h2>Overview</h2>
 The program generally passes most MQTT messages to a broker and only intercepts those that deal with topic names. If a mapping has been defined for a client, the program will apply diff to all incoming and outgoing topics and rewrite parts of the MQTT message that deal with topic names. It will keep all QoS, Will, and Duplicate settings.
@@ -24,3 +27,5 @@ Here are some different examples than those in diff.cpp:
   This inadvertently turns "device" in a capture group since it doesn't exactly match anything in stringMapAgainst. Thus the resulting new topic is just "PIT301."
   </li>
 </ol>
+<h1>Topic Trie</h1>
+There are dozens of ways to implement a trie in C++. This approach is similar to one that I have taken previously in Python. Although there are Python packages for tries, a topic trie is very specialized in that it must deal with wildcards, so you're left having to implement a custom trie yourself. A very easy and straight-forward approach in Python is to make a trie out of nested dictionaries. Here in Qt we use an unordered_map. We could have just as easily used a QHash.
