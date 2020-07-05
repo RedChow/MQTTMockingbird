@@ -28,12 +28,16 @@ Here are some different examples than those in diff.cpp:
   </li>
 </ol>
 <h1>Topic Trie</h1>
+<p>
 There are dozens of ways to implement a trie in C++. This approach is similar to one that I have taken previously in Python. Although there are Python packages for tries, a topic trie is very specialized in that it must deal with wildcards, so you're left having to implement a custom trie yourself. A very easy and straight-forward approach in Python is to make a trie out of nested dictionaries. Here in Qt we use an unordered_map. We could have just as easily used a QHash. 
-
-
+</p>
+<p>
 Because the program maps all incoming publish and subscribe topics, if you need wildcard in a subscription it would be best to include in the mapping definitions, namely in the remap topic rule. In the future I plan to have diff disregard topic fragments that contain '*' or '#.' It will probably apply diff to each topic fragment, i.e. each string between forward slashes.
-
+</p>
 <h1>Screenshots</h1>
-  ![Alt text](/screenshots/main_window_rule_for_node_red.png?raw=true)
-  ![Alt text](screenshots/main_window_rule_for_node_red.png?raw=true "Tracing")
+![Alt text](/screenshots/main_window_rule_for_node_red.png?raw=true "Main Window")
+
+![Alt text](/screenshots/mapped_topic_publish.png?raw=true "Shows incoming topic mapped")
+Show incoming topic mapped to a new topic.  
+  
 
