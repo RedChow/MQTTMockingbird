@@ -35,5 +35,5 @@ Because the program maps all incoming publish and subscribe topics, if you need 
 
 <h1>Screenshots</h1>
   ![Alt text](/screenshots/main_window_rule_for_node_red.png?raw=true)
-  ![Alt text](/screenshots/main_window_rule_for_node_red.png "Tracing")
+  ![Alt text](screenshots/main_window_rule_for_node_red.png?raw=true "Tracing")
 
