@@ -4,7 +4,9 @@
 #include <QObject>
 #include <QHash>
 
-
+/*
+ *  This is MQTTPacketv2 as the first version was an absolute horrid mess; this is only <i>slightly</li> better.
+ */
 
 class MQTTPacketv2: public QObject
 {
