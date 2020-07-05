@@ -14,6 +14,13 @@ There are several examples of how diff.cpp works and is applied, but the TLDR is
 Here are some different examples than those in diff.cpp:
 <h2>Examples</h2> 
 <ol>
-  <li> stringWithMapping: this/is/a/{0}-{1}/{2}, stringMapAgainst: this/is/a/bad-topic/reallybad, stringNewMapping: this/{0}/{2}
-
+  <li> <i>stringWithMapping</i>: this/is/a/{0}-{1}/{2}, <i>stringMapAgainst</i>: this/is/a/bad-topic/reallybad, <i>stringNewMapping</i>: this/{0}/{2}:
+    This will create the new topic this/bad/reallybad
+   </li>
+  <li> <li>stringWithMapping</i>:new/CAP1thereCAP2, <i>stringMapAgainst</i>:new/hellotheremaam, <i>stringNewMapping</i>: CAP1/CAP2:
+  This will create the new topic: hello/maam
+   </li>
+  <li>li>stringWithMapping</i>:device/uglytopic/{0}, <i>stringMapAgainst</i>:uglytopic/PIT301, <i>stringNewMapping</i>: device/{0}:
+  This inadvertently turns "device" in a capture group since it doesn't exactly match anything in stringMapAgainst. Thus the resulting new topic is just "PIT301."
+  </li>
 </ol>
